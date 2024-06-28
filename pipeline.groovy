@@ -16,13 +16,16 @@ pipeline {
                 }
             }
         }
+
+       
         stage('Run Docker Container') {
             steps {
                 script {
                     // Stop any running containers with the same name
-                    
+                    sh 'docker stop server-container || true'
+                    sh 'docker rm server-container || true'
                     // Run the new container
-                    sh 'docker run -d -p 3000:3000 supun3998/server-app-image'
+                    sh 'docker run -d -p 3000:3000 --name server-container supun3998/server-app-image'
                 }
             }
         }
@@ -47,7 +50,7 @@ pipeline {
                 script {
                     retry(3) {
                         echo 'Pushing image to Docker Hub...'
-                        sh 'docker push supun3998/frontend-app-image'
+                        sh 'docker push supun3998/server-app-image'
                     }
                 }
             }

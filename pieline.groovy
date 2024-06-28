@@ -31,6 +31,16 @@ pipeline {
                 sh 'docker ps'
             }
         }
+
+        stage('Login to Docker Hub') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'Dockerhub')]) {
+                    script {
+                        sh "docker login -u supun3998 -p ${Dockerhub}"
+                    }
+                }
+            }
+        }
     }
 
     post {
